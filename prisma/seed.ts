@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 async function main() {
-  // Seed book data
   const car = await prisma.car.create({
     data:   {
         brand: "Toyota",
