@@ -1,15 +1,22 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import styles from "./page.module.css";
 import Link from "next/link";
 import Car from "@/types/Car"
+import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
+import Container from "@/components/center";
+import MyButton from "@/components/button";
 
 export default function Home() {
+
+  const router = useRouter();
+  const RedirectToPage = (page: string) => {
+  router.push(page);}
+
   const [loading, setLoading] = useState<boolean>(true);
   const [cars, setCars] = useState<Car[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
   const Detail = (id: number) => {
     router.push(`/${id}`);
   };
@@ -44,48 +51,48 @@ export default function Home() {
     })
 }, []);
 if(loading) return(
-  <>
-    <div className={styles.loader}>
-      <div className={styles.loaderInner}>
-        <div className={styles.loaderLineWrap}>
-          <div className={styles.loaderLine}></div>
-        </div>
-        <div className={styles.loaderLineWrap}>
-          <div className={styles.loaderLine}></div>
-        </div>
-        <div className={styles.loaderLineWrap}>
-          <div className={styles.loaderLine}></div>
-        </div>
-        <div className={styles.loaderLineWrap}>
-          <div className={styles.loaderLine}></div>
-        </div>
-        <div className={styles.loaderLineWrap}>
-          <div className={styles.loaderLine}></div>
-        </div>
-      </div>
-    </div>
-  </>
+  <Container>
+    <Button variant="primary" disabled>
+      <Spinner
+        as="span"
+        animation="border"
+        size="sm"
+        role="status"
+        aria-hidden="true"
+      />
+      <span className="visually-hidden">Loading...</span>
+    </Button>{' '}
+    <Button variant="primary" disabled>
+      <Spinner
+        as="span"
+        animation="grow"
+        size="sm"
+        role="status"
+        aria-hidden="true"
+      />
+      Loading...
+    </Button>    
+  </Container>
 )
 if(error != null)
       return(
-        <>
-        <h1 style={{ color: "red" }}>{error}</h1>
-        <br></br>
-        </>
+      <Container>
+      <h1 style={{ color: "red" }}>{error}</h1>
+      <br></br>
+      <MyButton color="black" size="large" type="button" onClick={()=> RedirectToPage("/")}>Go Back</MyButton> 
+      </Container>
     )
     if(cars.length == 0)
     return(
-        <>
+      <Container>
         <h1>There aren&apos;t any cars yet</h1>
         <br></br>
-        <Link href="/add">
-          Add some!
-        </Link>
-        </>
+        <MyButton color="green" size="large" type="button" onClick={()=> RedirectToPage("/add")}>Add car</MyButton> 
+        </Container>
         )
     return(
-        <>
-        <h1>My ReadList</h1>
+      <Container>
+        <h1>CarList</h1>
 
 
           {cars.map((car) => (
@@ -93,15 +100,13 @@ if(error != null)
 
 
                 <p>{car.brand} {car.model}</p>
-                <button onClick={() => Detail(car.id)} >Details</button>
-                <button onClick={() => deleteCar(car.id)} >Delete</button>
+                <MyButton color="black" size="large" type="button" onClick={()=>  Detail(car.id)}>Detail</MyButton> 
+                <MyButton color="red" size="large" type="button" onClick={()=>  deleteCar(car.id)}>Delete car</MyButton>
             </div>
           ))}
 
         <br></br>
-        <Link href="/add">
-          Add some more!
-        </Link>
-        </>
+        <MyButton color="green" size="large" type="button" onClick={()=> RedirectToPage("/add")}>Add car</MyButton> 
+        </Container>
     )
 }

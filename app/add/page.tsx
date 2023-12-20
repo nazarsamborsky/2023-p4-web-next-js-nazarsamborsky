@@ -1,6 +1,14 @@
 "use client";
 import Link from "next/link";
+import { redirect, useRouter } from "next/navigation";
+import Container from "@/components/center";
+import MyButton from "@/components/button";
+import MyForm from "@/components/MyForm";
 export default function AddPage(){
+    const router = useRouter();
+    const RedirectToPage = (page: string) => {
+    router.push(page);}
+
     const currentYear = new Date().getFullYear();
     const add = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -25,15 +33,17 @@ export default function AddPage(){
         })
     };
     return(
-        <>
+        <Container>
         <form onSubmit={add}>
-            <input placeholder="Brand" type="text" name="brand" />
-            <input placeholder="Model" type="text" name="model" />
-            <input placeholder="Production Year" type="number" name="year" defaultValue={2001} max={currentYear}/>
-            <textarea placeholder="Description" name="description" />
-            <button type="submit">Add</button>
+            <MyForm>
+                <input placeholder="Brand" type="text" name="brand" />
+                <input placeholder="Model" type="text" name="model" />
+                <input placeholder="Production Year" type="number" name="year" defaultValue={2001} max={currentYear}/>
+                <textarea placeholder="Description" name="description" />
+                <MyButton color="green" size="medium" type="submit" onClick={() => {}}>Add</MyButton>                
+            </MyForm>
         </form>
-        <Link href="/">Main menu</Link>        
-        </>
+        <MyButton color="black" size="large" type="button" onClick={()=> RedirectToPage("/")}>Main menu</MyButton>        
+        </Container>
     )
     }
